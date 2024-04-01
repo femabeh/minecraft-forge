@@ -12,7 +12,8 @@ download_url = "https://files.minecraftforge.net/net/minecraftforge/forge/index_
 if not os.path.isfile("already_started"):
     f = open("already_started", "a")
     f.close()
-    fp = urllib.request.urlopen(download_url)
+    fpreq = urllib.request.Request(download_url, headers={'User-Agent': 'Mozilla/5.0'})
+    fp = urllib.request.urlopen(fpreq)
     mybytes = fp.read()
     html = mybytes.decode("utf8")
     fp.close()
@@ -24,7 +25,10 @@ if not os.path.isfile("already_started"):
         url = downloads[1].a['href']
     
     finalurl = re.sub('(https:\/\/adfoc\.us\/serve\/sitelinks\/+[-?]+id=[\d]+&url=)', '', url)
-    urlrequest = urllib.request.urlretrieve(finalurl, "forge.jar")
+    opener = urllib.request.URLopener()
+    opener.addheader('User-Agent', 'Mozilla/5.0')
+    filename, headers = opener.retrieve(finalurl, 'forge.jar')
+    #urlrequest = urllib.request.urlretrieve(finalurl, "forge.jar")
     proc = subprocess.run(['java', '-jar', 'forge.jar', '--installServer', '.'])
     
     if os.path.isfile("forge.jar"):
