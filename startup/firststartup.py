@@ -2,19 +2,21 @@ import urllib.request
 from bs4 import BeautifulSoup
 import os
 import re
-import requests
 import subprocess
 from subprocess import STDOUT,PIPE
+
+forgeversion = os.getenv('FORGEVERSION', 'latest')
+mc_version = os.getenv("MC_VERSION")
+download_url = "https://files.minecraftforge.net/net/minecraftforge/forge/index_" + mc_version + ".html"
 
 if not os.path.isfile("already_started"):
     f = open("already_started", "a")
     f.close()
-    fp = urllib.request.urlopen("https://files.minecraftforge.net/net/minecraftforge/forge/")
+    fp = urllib.request.urlopen(download_url)
     mybytes = fp.read()
     html = mybytes.decode("utf8")
     fp.close()
     soup = BeautifulSoup(html, 'html.parser')
-    forgeversion = os.getenv('FORGEVERSION', 'latest')
     downloads = soup.body.find_all('div', attrs={'class':'download'})
     if forgeversion == 'latest':
         url = downloads[0].a['href']

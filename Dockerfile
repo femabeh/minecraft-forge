@@ -12,6 +12,8 @@ RUN pip3 install bs4 requests
 
 ENV FORGEVERSION=recommended
 
+ENV MC_VERSION = 1.20.1
+
 COPY startup/* /minecraft
 
 RUN python3 firststartup.py
